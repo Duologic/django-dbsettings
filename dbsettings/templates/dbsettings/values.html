@@ -1,4 +1,3 @@
-{% regroup class.list|dictsort:"verbose_name" by verbose_name as classes %}
 {% for class in classes %}
     {% if class.grouper %}
         <tr>
