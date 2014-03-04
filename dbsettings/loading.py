@@ -1,6 +1,6 @@
 from bisect import bisect
 
-from django.utils.datastructures import SortedDict
+from collections import OrderedDict
 from django.core.cache import cache
 
 from dbsettings.models import Setting
@@ -9,13 +9,7 @@ __all__ = ['get_all_settings', 'get_setting', 'get_setting_storage',
            'register_setting', 'unregister_setting', 'set_setting_value']
 
 
-class SettingDict(SortedDict):
-    "Sorted dict that has a bit more list-type functionality"
-
-    def __iter__(self):
-        return iter(self.values())
-
-_settings = SettingDict()
+_settings = OrderedDict()
 
 
 def _get_cache_key(module_name, class_name, attribute_name):
@@ -23,7 +17,7 @@ def _get_cache_key(module_name, class_name, attribute_name):
 
 
 def get_all_settings():
-    return list(_settings)
+    return _settings
 
 
 def get_app_settings(app_label):
@@ -58,7 +52,7 @@ def get_setting_storage(module_name, class_name, attribute_name):
 
 def register_setting(setting):
     if setting.key not in _settings:
-        _settings.insert(bisect(list(_settings), setting), setting.key, setting)
+        _settings[setting.key]=setting
 
 
 def unregister_setting(setting):
