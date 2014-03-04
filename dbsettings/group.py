@@ -14,10 +14,11 @@ class GroupBase(type):
         attrs.pop('__module__', None)
         attrs.pop('__doc__', None)
         for attribute_name, attr in attrs.items():
-            if not isinstance(attr, Value):
-                raise TypeError('The type of %s (%s) is not a valid Value.' %
-                                (attribute_name, attr.__class__.__name__))
-            mcs.add_to_class(attribute_name, attr)
+            if attribute_name!='__qualname__':
+                if not isinstance(attr, Value):
+                    raise TypeError('The type of %s (%s) is not a valid Value.' %
+                                    (attribute_name, attr.__class__.__name__))
+                mcs.add_to_class(attribute_name, attr)
         super(GroupBase, mcs).__init__(name, bases, attrs)
 
 
